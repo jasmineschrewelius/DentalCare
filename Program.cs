@@ -1,11 +1,79 @@
-﻿using static System.Console;
+﻿using DentalCare.Data;
+using DentalCare.Domain;
+using static System.Console;
 
 namespace DentalCare;
 
 class Program
 {
-  public static void Main()
-  {
+    public static void Main()
+    {
+        Title = "Dental Care";
 
-  }
+        while (true)
+        {
+            CursorVisible = false;
+
+            WriteLine("1. Registrera patient");
+
+            var keyPressed = ReadKey(true);
+
+            Clear();
+
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    RegisterPatientView();
+                    break;
+            }
+
+            Clear();
+        }
+    }
+
+    private static void RegisterPatientView()
+    {
+        var firstName = GetUserInput("Förnamn");
+        var lastName = GetUserInput("Efternamn");
+        var socialSecurityNumber = GetUserInput("Personnummer");
+        var phone = GetUserInput("Telefonnummer");
+        var email = GetUserInput("E-post");
+
+        var patient = new Patient
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            SocialSecurityNumber = socialSecurityNumber,
+            Phone = phone,
+            Email = email
+        };
+
+        SavePatient(patient);
+
+        Clear();
+
+        WriteLine("Patient sparad");
+
+        Thread.Sleep(2000);
+    }
+
+    private static void SavePatient(Patient patient)
+    {
+        using var context = new ApplicationDbContext();
+
+        context.Patient.Add(patient);
+
+        // Här räknar DbContext ut vad som behöver ske i databasen för att säkerställa
+        // att data vi för tillfället enbart har i minnet, ska synkas med databasen - i detta 
+        // fallet innebär det att en INSERT INTO kommer genereras och skickas till databasen.-
+        context.SaveChanges();
+    }
+
+    private static string GetUserInput(string label)
+    {
+        Write($"{label}: ");
+
+        return ReadLine() ?? "";
+    }
 }
