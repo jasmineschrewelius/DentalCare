@@ -16,6 +16,7 @@ class Program
 
             WriteLine("1. Registrera patient");
             WriteLine("2. Sök patient");
+            WriteLine("3. Uppdatera patient");
 
             var keyPressed = ReadKey(true);
 
@@ -37,10 +38,49 @@ class Program
                     
                     break;
 
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    
+                    UpdatePatientView();
+                    
+                    break;
             }
 
             Clear();
         }
+    }
+
+    private static void UpdatePatientView()
+    {
+        var socialSecurityNumber = GetUserInput("Personnummer");
+
+        var patient = FindPatient(socialSecurityNumber);
+
+        if (patient is not null)
+        {
+            WriteLine($"{patient.FirstName} {patient.LastName}, {patient.SocialSecurityNumber}");
+
+            WriteLine(new string('-', 60));
+
+            using var context = new ApplicationDbContext();
+
+            context.Patient.Attach(patient);
+
+            patient.FirstName = GetUserInput("Förnamn");
+            patient.LastName = GetUserInput("Efternamn");
+            patient.Phone = GetUserInput("Telefonnummer");
+            patient.Email = GetUserInput("E-post");
+
+            context.SaveChanges();
+
+            WriteLine("Patient sparad");
+        }
+        else
+        {
+            WriteLine("Patient saknas");
+        }
+
+        Thread.Sleep(2000);
     }
 
     private static void SearchPatientView()
