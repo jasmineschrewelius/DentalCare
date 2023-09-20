@@ -17,6 +17,7 @@ class Program
             WriteLine("1. Registrera patient");
             WriteLine("2. Sök patient");
             WriteLine("3. Uppdatera patient");
+            WriteLine("4. Radera patient");
 
             var keyPressed = ReadKey(true);
 
@@ -44,10 +45,41 @@ class Program
                     UpdatePatientView();
                     
                     break;
+                
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    
+                    DeletePatientView();
+                    
+                    break;                    
             }
 
             Clear();
         }
+    }
+
+    private static void DeletePatientView()
+    {
+        var socialSecurityNumber = GetUserInput("Personnummer");
+
+        var patient = FindPatient(socialSecurityNumber);
+
+        if (patient is not null)
+        {
+            using var context = new ApplicationDbContext();
+
+            context.Patient.Remove(patient);
+
+            context.SaveChanges();
+
+            WriteLine("Patient raderad");
+        }
+        else
+        {
+            WriteLine("Patient saknas");
+        }
+
+        Thread.Sleep(2000);
     }
 
     private static void UpdatePatientView()
@@ -102,6 +134,8 @@ class Program
         else
         {
             WriteLine("Patient saknas");
+
+            Thread.Sleep(2000);
         }
     }
 
