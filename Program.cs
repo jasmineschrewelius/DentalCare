@@ -15,6 +15,7 @@ class Program
             CursorVisible = false;
 
             WriteLine("1. Registrera patient");
+            WriteLine("2. Sök patient");
 
             var keyPressed = ReadKey(true);
 
@@ -24,12 +25,58 @@ class Program
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
+
                     RegisterPatientView();
+
                     break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    
+                    SearchPatientView();
+                    
+                    break;
+
             }
 
             Clear();
         }
+    }
+
+    private static void SearchPatientView()
+    {
+        var socialSecurityNumber = GetUserInput("Personnummer");
+
+        var patient = FindPatient(socialSecurityNumber);
+
+        if (patient is not null)
+        {
+            WriteLine($"Förnamn: {patient.FirstName}");
+            WriteLine($"Efteramn: {patient.LastName}");
+            WriteLine($"Personnummer: {patient.SocialSecurityNumber}");
+            WriteLine($"Telefonnummer: {patient.Phone}");
+            WriteLine($"E-post: {patient.Email}");
+
+            WaitUntilKeyPressed(ConsoleKey.Escape);
+        }
+        else
+        {
+            WriteLine("Patient saknas");
+        }
+    }
+
+    private static void WaitUntilKeyPressed(ConsoleKey key)
+    {
+        while (ReadKey(true).Key != key);
+    }
+
+    private static Patient? FindPatient(string socialSecurityNumber)
+    {
+        using var context = new ApplicationDbContext();
+
+        var patient = context.Patient.FirstOrDefault(x => x.SocialSecurityNumber == socialSecurityNumber);
+
+        return patient;
     }
 
     private static void RegisterPatientView()

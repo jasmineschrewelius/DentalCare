@@ -55,7 +55,7 @@ namespace DentalCare.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patient");
+                    b.ToTable("Patient", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -6,4 +6,8 @@ Enkel konsolapplikation för hantering av patienter.
 
 1. Klona repot.
 
-2. Starta applikationen.
+2. Sätta upp databas.
+
+`dotnet ef database update`
+
+3. Starta applikationen.
