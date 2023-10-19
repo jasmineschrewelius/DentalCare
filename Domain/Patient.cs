@@ -5,9 +5,6 @@ namespace DentalCare.Domain;
 
 class Patient
 {
-    // Konvention i EF Core är att om du lägger till ett en publik property med namn
-    // Id eller PatientId så kommer denna automatiskt utses vara primärnyckel. 
-    // Kan annars använda [Key] för att specificera primärnyckel.
     public int Id { get; set; }
 
     [MaxLength(50)]

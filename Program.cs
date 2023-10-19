@@ -185,9 +185,6 @@ class Program
 
         context.Patient.Add(patient);
 
-        // Här räknar DbContext ut vad som behöver ske i databasen för att säkerställa
-        // att data vi för tillfället enbart har i minnet, ska synkas med databasen - i detta 
-        // fallet innebär det att en INSERT INTO kommer genereras och skickas till databasen.-
         context.SaveChanges();
     }
 

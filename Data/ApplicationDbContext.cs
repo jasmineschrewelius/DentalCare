@@ -16,5 +16,5 @@ class ApplicationDbContext : DbContext
 
     // Enligt konvention i EF Core kommer det förväntas att det finns en tabell med namn Patient
     // som har samma antal kolumner som det finns publika properties i Patient.
-    public DbSet<Patient> Patient { get; set; }
+    public DbSet<Patient> Patient  { get; set; }
 }
